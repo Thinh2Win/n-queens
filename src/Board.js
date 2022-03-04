@@ -61,8 +61,7 @@
       );
     },
 
-
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,12 +78,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var counter = 0;
+      for (let i = 0; i < this.attributes[rowIndex].length; i++) {
+        if (this.attributes[rowIndex][i] !== 0) {
+          counter++;
+        }
+      }
+      return counter > 1 ? true : false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+
+      var result = false; // fixme
+      for (let i = 0; i < this.attributes.n; i++) {
+        if (this.hasRowConflictAt(i) === true) {
+          result = true;
+          break;
+        }
+      }
+      return result;
     },
 
 
@@ -94,27 +107,62 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var counter = 0;
+      for (let i = 0; i < this.attributes.n; i++) {
+        if (this.attributes[i][colIndex]) {
+          counter++;
+        }
+      }
+      return counter > 1 ? true : false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var result = false;
+      for (let i = 0; i < this.attributes.n; i ++) {
+        if (this.hasColConflictAt(i) === true) {
+          result = true;
+          break;
+        }
+      }
+      return result;
     },
 
 
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
-    //
+    // _getFirstRowColumnIndexForMajorDiagonalOn: function(rowIndex, colIndex) {
+    //   return colIndex - rowIndex;
+    // },
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var counter = 0;
+      for (let i = 0; i < this.attributes.n; i++) {
+        for (let j = 0; j < this.attributes.n; j++) {
+          if (j - i === majorDiagonalColumnIndexAtFirstRow) {
+            if (this.attributes[i][j] !== 0) {
+              counter++;
+            }
+          }
+        }
+      }
+      return counter > 1 ? true : false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var result = false;
+      for (let i = 0; i < this.attributes.n; i++) {
+        for (let j = 0; j < this.attributes.n; j++ ) {
+          if (this.attributes[i][j] !== 0) {
+            if (this.hasMajorDiagonalConflictAt(j - i)) {
+              result = true;
+            }
+          }
+        }
+      }
+      return result;
     },
 
 
@@ -123,13 +171,28 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMinorDiagonalConflictAt: function (minorDiagonalColumnIndexAtFirstRow) {
+      var counter = 0;
+      for (var i = 0; i < this.attributes.n; i++) {
+        if (this.attributes[i][minorDiagonalColumnIndexAtFirstRow - i]) {
+          counter++;
+        }
+      }
+      return counter > 1 ? true : false;
+
     },
 
     // test if any minor diagonals on this board contain conflicts
-    hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+    hasAnyMinorDiagonalConflicts: function () {
+      var result = false;
+      for (var i = 0; i < this.attributes.n * 2; i++) {
+        console.log(this.hasMinorDiagonalConflictAt(i));
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          result = true;
+          break;
+        }
+      }
+      return result;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
@@ -146,3 +209,4 @@
   };
 
 }());
+
